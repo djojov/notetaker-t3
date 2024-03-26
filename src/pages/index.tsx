@@ -1,4 +1,3 @@
-import { Topic } from "@prisma/client";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import React, { useState } from "react";
