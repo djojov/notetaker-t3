@@ -1,4 +1,4 @@
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Head from "next/head";
 import React, { useState } from "react";
 import Header from "~/components/Header";
@@ -8,6 +8,8 @@ import { NoteEditor } from "~/components/NoteEditor";
 import { api, type RouterOutputs } from "~/utils/api";
 
 export default function Home() {
+  const { data: sessionData } = useSession();
+
   return (
     <>
       <Head>
@@ -17,7 +19,16 @@ export default function Home() {
       </Head>
       <main>
         <Header />
-        <Content />
+        {sessionData?.user ? (
+          <Content />
+        ) : (
+          <div className="flex h-screen flex-col items-center justify-center">
+            <p className="mb-10 text-2xl">Sign in to view your notes</p>
+            <button className="btn btn-primary" onClick={() => void signIn()}>
+              Sign in
+            </button>
+          </div>
+        )}
       </main>
     </>
   );
@@ -34,10 +45,6 @@ const Content: React.FC = () => {
     undefined,
     {
       enabled: sessionData?.user !== undefined,
-
-      onSuccess: () => {
-        setSelectedTopic(selectedTopic ?? data[0] ?? null);
-      },
     },
   );
 
