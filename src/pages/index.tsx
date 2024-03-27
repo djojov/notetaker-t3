@@ -30,7 +30,7 @@ const Content: React.FC = () => {
 
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
 
-  const { data: topics, refresh: refreshTopics } = api.topic.getAll.useQuery(
+  const { data: topics, refetch: refreshTopics } = api.topic.getAll.useQuery(
     undefined,
     {
       enabled: sessionData?.user !== undefined,
@@ -49,7 +49,7 @@ const Content: React.FC = () => {
   return (
     <div className="mx-5 mt-5 grid grid-cols-4 gap-2">
       <div className="px-2">
-        <ul className="menu rounded-box bg-base-100 w-56 p-2">
+        <ul className="menu w-56 rounded-box bg-base-100 p-2">
           {topics?.map((topic) => (
             <li key={topic.id}>
               <a
@@ -68,7 +68,7 @@ const Content: React.FC = () => {
         <input
           type="text"
           placeholder="New Topic"
-          className="input-bordered input input-sm w-full"
+          className="input input-sm input-bordered w-full"
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               createTopic.mutate({
