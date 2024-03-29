@@ -1,14 +1,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
-import {
-  GitBranch,
-  Github,
-  GithubIcon,
-  Instagram,
-  LucideGithub,
-  Mail,
-} from "lucide-react";
+import { Github, Mail } from "lucide-react";
 import { ModeToggle } from "./ui/theme-toggle";
 import {
   DropdownMenu,
@@ -66,7 +59,7 @@ function Header() {
                 <DropdownMenuItem
                   onClick={() => void signOut()}
                   className={cn(
-                    "cursor-pointer  font-sans antialiased",
+                    "cursor-pointer font-sans text-red-600 antialiased",
                     fontSans.variable,
                   )}
                 >

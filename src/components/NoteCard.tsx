@@ -1,7 +1,4 @@
 import { useState } from "react";
-
-import ReactMarkdown from "react-markdown";
-
 import { type RouterOutputs } from "../utils/api";
 import {
   Collapsible,
@@ -9,7 +6,7 @@ import {
   CollapsibleTrigger,
 } from "./ui/collapsible";
 import { Button } from "./ui/button";
-import { Trash, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 
 type Note = RouterOutputs["note"]["getAll"][0];
 

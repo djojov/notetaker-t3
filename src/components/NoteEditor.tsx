@@ -1,8 +1,4 @@
 import { useState } from "react";
-
-import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
-import { languages } from "@codemirror/language-data";
-import CodeMirror from "@uiw/react-codemirror";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
 import { Input } from "./ui/input";
