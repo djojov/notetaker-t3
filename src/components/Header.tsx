@@ -1,37 +1,32 @@
 import { signIn, signOut, useSession } from "next-auth/react";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Button } from "./ui/button";
+import { Mail } from "lucide-react";
 
 function Header() {
   const { data: sessionData } = useSession();
 
   return (
-    <div className="navbar bg-primary text-primary-content">
-      <div className="flex-1 pl-5 text-3xl font-bold">
-        {sessionData?.user?.name ? `Notes for ${sessionData.user.name}` : ""}
-      </div>
-      <div className="flex-none gap-2">
-        <div className="dropdown-end dropdown">
-          {sessionData?.user ? (
-            <label
-              tabIndex={0}
-              className="btn-ghost btn-circle avatar btn"
-              onClick={() => void signOut()}
-            >
-              <div className="w-10 rounded-full">
-                <img
-                  src={sessionData?.user?.image ?? ""}
-                  alt={sessionData?.user?.name ?? ""}
-                />
-              </div>
-            </label>
-          ) : (
-            <button
-              className="btn-ghost rounded-btn btn"
-              onClick={() => void signIn()}
-            >
-              Sign in
-            </button>
-          )}
+    <div className="bg-zinc-950 p-4">
+      <div className="container flex flex-row items-center justify-between">
+        <div className="text-xl font-bold text-zinc-50">
+          {sessionData?.user?.name
+            ? `Notes for ${sessionData.user.name}`
+            : "Notetaker T3"}
         </div>
+        {sessionData?.user ? (
+          <Avatar
+            onClick={() => void signOut()}
+            className="cursor-pointer rounded-full"
+          >
+            <AvatarImage src={sessionData?.user?.image ?? ""} />
+            <AvatarFallback>{sessionData?.user?.name?.[0]}</AvatarFallback>
+          </Avatar>
+        ) : (
+          <Button onClick={() => void signIn()}>
+            <Mail className="mr-2 h-4 w-4" /> Sign in with Google
+          </Button>
+        )}
       </div>
     </div>
   );
