@@ -27,7 +27,9 @@ function Header() {
   return (
     <div className="border-border/40 sticky top-0 border-b p-4 backdrop-blur">
       <div className="container flex flex-row items-center justify-between">
-        <div className="text-xl font-bold text-primary">Notetaker T3</div>
+        <a href="#" className="text-xl font-bold text-primary">
+          Notetaker T3
+        </a>
         <div className="flex gap-x-4">
           {sessionData?.user ? (
             <DropdownMenu>
