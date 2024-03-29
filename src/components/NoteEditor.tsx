@@ -3,6 +3,9 @@ import { useState } from "react";
 import { markdown, markdownLanguage } from "@codemirror/lang-markdown";
 import { languages } from "@codemirror/language-data";
 import CodeMirror from "@uiw/react-codemirror";
+import { Label } from "./ui/label";
+import { Textarea } from "./ui/textarea";
+import { Input } from "./ui/input";
 
 export const NoteEditor = ({
   onSave,
@@ -13,28 +16,27 @@ export const NoteEditor = ({
   const [title, setTitle] = useState<string>("");
 
   return (
-    <div className="card mt-5 border border-gray-200 bg-base-100 shadow-xl">
-      <div className="card-body">
-        <h2 className="card-title">
-          <input
-            type="text"
-            placeholder="Note title"
-            className="input input-lg input-primary w-full font-bold"
-            value={title}
-            onChange={(e) => setTitle(e.currentTarget.value)}
-          />
-        </h2>
-        <CodeMirror
+    <>
+      <div className="mb-5 grid w-full max-w-sm items-center gap-1.5">
+        <Label htmlFor="noteTitle">Title</Label>
+        <Input
+          value={title}
+          onChange={(e) => setTitle(e.currentTarget.value)}
+          type="text"
+          id="noteTitle"
+          placeholder="Enter your title"
+        />
+      </div>
+
+      <div className="grid w-full gap-1.5">
+        <Label htmlFor="noteContent">Your note</Label>
+        <Textarea
           value={code}
-          width="500px"
-          height="30vh"
-          minWidth="100%"
-          minHeight="30vh"
-          extensions={[
-            markdown({ base: markdownLanguage, codeLanguages: languages }),
-          ]}
-          onChange={(value) => setCode(value)}
-          className="border border-gray-300"
+          onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
+            setCode(event.target.value)
+          }
+          placeholder="Type your note..."
+          id="noteContent"
         />
       </div>
       <div className="card-actions justify-end">
@@ -48,11 +50,11 @@ export const NoteEditor = ({
             setTitle("");
           }}
           className="btn btn-primary mb-8 mr-8"
-          disabled={title.trim().length === 0 || code.trim().length === 0}
+          disabled={title.trim().length === 0 || code.length === 0}
         >
           Save
         </button>
       </div>
-    </div>
+    </>
   );
 };

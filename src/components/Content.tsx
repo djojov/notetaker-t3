@@ -47,7 +47,7 @@ export const Content: React.FC = () => {
   });
 
   return (
-    <div className="mx-5 mt-5 grid grid-cols-4 gap-2">
+    <div className="container mx-auto mt-5 grid grid-cols-4 gap-2">
       <div className="px-2">
         <ul className="menu w-56 rounded-box bg-base-100 p-2">
           {topics?.map((topic) => (

@@ -7,7 +7,7 @@ function Header() {
   const { data: sessionData } = useSession();
 
   return (
-    <div className="bg-zinc-950 p-4">
+    <div className="border-border/40 sticky top-0 border-b p-4 backdrop-blur">
       <div className="container flex flex-row items-center justify-between">
         <div className="text-xl font-bold text-zinc-50">
           {sessionData?.user?.name

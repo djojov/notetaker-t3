@@ -32,7 +32,7 @@ export const NoteCard = ({
         {note.title}
       </CollapsibleTrigger>
       <CollapsibleContent className="mt-8 flex flex-col">
-        <ReactMarkdown>{note.content}</ReactMarkdown>
+        {note.content}
         <Button onClick={onDelete} variant="outline" size="icon">
           <Trash2 className="h-4 w-4" />
         </Button>
