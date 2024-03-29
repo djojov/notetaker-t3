@@ -3,6 +3,13 @@ import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 
 import { type RouterOutputs } from "../utils/api";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "./ui/collapsible";
+import { Button } from "./ui/button";
+import { Trash, Trash2 } from "lucide-react";
 
 type Note = RouterOutputs["note"]["getAll"][0];
 
@@ -13,30 +20,23 @@ export const NoteCard = ({
   note: Note;
   onDelete: () => void;
 }) => {
-  const [isExpanded, setIsExpanded] = useState<boolean>(true);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
 
   return (
-    <div className="card mt-5 border border-gray-200 bg-base-100 shadow-xl">
-      <div className="card-body m-0 p-3">
-        <div
-          className={`collapse-arrow ${
-            isExpanded ? "collapse-open" : ""
-          } collapse`}
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
-          <div className="collapse-title text-xl font-bold">{note.title}</div>
-          <div className="collapse-content">
-            <article className="prose lg:prose-xl">
-              <ReactMarkdown>{note.content}</ReactMarkdown>
-            </article>
-          </div>
-        </div>
-        <div className="card-actions mx-2 flex justify-end">
-          <button className="btn btn-warning btn-xs px-5" onClick={onDelete}>
-            Delete
-          </button>
-        </div>
-      </div>
-    </div>
+    <Collapsible
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      className="mt-8 rounded-md border border-zinc-50 bg-base-100 p-6 shadow-lg"
+    >
+      <CollapsibleTrigger className="text-xl font-bold">
+        {note.title}
+      </CollapsibleTrigger>
+      <CollapsibleContent className="mt-8 flex flex-col">
+        <ReactMarkdown>{note.content}</ReactMarkdown>
+        <Button onClick={onDelete} variant="outline" size="icon">
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      </CollapsibleContent>
+    </Collapsible>
   );
 };
