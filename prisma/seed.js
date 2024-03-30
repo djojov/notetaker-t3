@@ -9,7 +9,7 @@ async function main() {
         id: user.id,
       },
       create: {
-        topics: {
+        folders: {
           create: {
             id: "1",
             title: "Notes",

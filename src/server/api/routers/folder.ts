@@ -1,9 +1,9 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
-export const topicRouter = createTRPCRouter({
+export const folderRouter = createTRPCRouter({
   getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.topic.findMany({
+    return ctx.db.folder.findMany({
       where: {
         userId: ctx.session.user.id,
       },
@@ -13,7 +13,7 @@ export const topicRouter = createTRPCRouter({
   create: protectedProcedure
     .input(z.object({ title: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.topic.create({
+      return ctx.db.folder.create({
         data: {
           title: input.title,
           userId: ctx.session.user.id,
@@ -29,7 +29,7 @@ export const topicRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.topic.create({
+      return ctx.db.folder.create({
         data: {
           title: input.title,
           userId: ctx.session.user.id,

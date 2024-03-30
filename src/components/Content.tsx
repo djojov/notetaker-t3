@@ -16,47 +16,47 @@ import {
 } from "./ui/dialog";
 import { Input } from "./ui/input";
 
-type Topic = RouterOutputs["topic"]["getAll"][0];
+type Folder = RouterOutputs["folder"]["getAll"][0];
 
 export const Content: React.FC = () => {
-  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+  const [selectedFolder, setSelectedFolder] = useState<Folder | null>(null);
   const [addLabelDialog, setAddLabelDialog] = useState(false);
-  const [initialTopicCreated, setInitialTopicCreated] = useState(false);
+  const [initialFolderCreated, setInitialFolderCreated] = useState(false);
 
   const { data: sessionData } = useSession();
 
-  const { data: topics, refetch: refreshTopics } = api.topic.getAll.useQuery(
+  const { data: folders, refetch: refreshFolders } = api.folder.getAll.useQuery(
     undefined,
     {
       enabled: sessionData?.user !== undefined,
     },
   );
 
-  const createInitialTopic = api.topic.createInitial.useMutation({
+  const createInitialFolder = api.folder.createInitial.useMutation({
     onSuccess: () => {
-      void refreshTopics();
+      void refreshFolders();
     },
   });
 
-  const createTopic = api.topic.create.useMutation({
+  const createFolder = api.folder.create.useMutation({
     onSuccess: () => {
-      void refreshTopics();
+      void refreshFolders();
     },
   });
 
   useEffect(() => {
-    if (topics?.length === 0 && !initialTopicCreated) {
-      void createInitialTopic.mutate({});
-      setInitialTopicCreated(true);
+    if (folders?.length === 0 && !initialFolderCreated) {
+      void createInitialFolder.mutate({});
+      setInitialFolderCreated(true);
     }
-  }, [topics, initialTopicCreated, createInitialTopic]);
+  }, [folders, initialFolderCreated, createInitialFolder]);
 
   const { data: notes, refetch: refreshNotes } = api.note.getAll.useQuery(
     {
-      topicId: selectedTopic?.id ?? topics?.[0]?.id ?? "",
+      folderId: selectedFolder?.id ?? folders?.[0]?.id ?? "",
     },
     {
-      enabled: sessionData?.user !== undefined && selectedTopic !== null,
+      enabled: sessionData?.user !== undefined && selectedFolder !== null,
     },
   );
 
@@ -73,26 +73,28 @@ export const Content: React.FC = () => {
   });
 
   useEffect(() => {
-    setSelectedTopic(selectedTopic ?? topics?.[0] ?? null);
-  }, [selectedTopic, topics]);
+    setSelectedFolder(selectedFolder ?? folders?.[0] ?? null);
+  }, [selectedFolder, folders]);
 
   return (
     <div className="container mx-auto mt-5 grid grid-cols-4 gap-2">
       <div className="px-2">
         <ul className="menu rounded-box bg-base-100 w-56 p-2">
-          {topics?.map((topic) => (
-            <li key={topic.id}>
+          {folders?.map((folder) => (
+            <li key={folder.id}>
               <a
                 href="#"
                 onClick={(evt) => {
                   evt.preventDefault();
-                  setSelectedTopic(topic);
+                  setSelectedFolder(folder);
                 }}
                 className={`text-sm font-medium transition-colors hover:text-primary ${
-                  selectedTopic?.id === topic.id ? "" : "text-muted-foreground"
+                  selectedFolder?.id === folder.id
+                    ? ""
+                    : "text-muted-foreground"
                 }`}
               >
-                {topic.title}
+                {folder.title}
               </a>
             </li>
           ))}
@@ -123,7 +125,7 @@ export const Content: React.FC = () => {
               placeholder="Create a new label..."
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  createTopic.mutate({
+                  createFolder.mutate({
                     title: e.currentTarget.value,
                   });
                   e.currentTarget.value = "";
@@ -144,7 +146,7 @@ export const Content: React.FC = () => {
                   const newLabelInput = document.getElementById(
                     "newLabelInput",
                   ) as HTMLInputElement;
-                  createTopic.mutate({
+                  createFolder.mutate({
                     title: newLabelInput.value,
                   });
                   newLabelInput.value = "";
@@ -163,7 +165,7 @@ export const Content: React.FC = () => {
             void createNote.mutate({
               title,
               content,
-              topicId: selectedTopic?.id ?? topics?.[0]?.id ?? "",
+              folderId: selectedFolder?.id ?? folders?.[0]?.id ?? "",
             });
           }}
         />
