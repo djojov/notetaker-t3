@@ -20,4 +20,20 @@ export const topicRouter = createTRPCRouter({
         },
       });
     }),
+
+  createInitial: protectedProcedure
+    .input(
+      z.object({
+        title: z.string().optional().default("Notes"),
+        id: z.string().default("1"),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.topic.create({
+        data: {
+          title: input.title,
+          userId: ctx.session.user.id,
+        },
+      });
+    }),
 });

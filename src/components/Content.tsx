@@ -19,10 +19,11 @@ import { Input } from "./ui/input";
 type Topic = RouterOutputs["topic"]["getAll"][0];
 
 export const Content: React.FC = () => {
-  const { data: sessionData } = useSession();
-
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
   const [addLabelDialog, setAddLabelDialog] = useState(false);
+  const [initialTopicCreated, setInitialTopicCreated] = useState(false);
+
+  const { data: sessionData } = useSession();
 
   const { data: topics, refetch: refreshTopics } = api.topic.getAll.useQuery(
     undefined,
@@ -31,24 +32,33 @@ export const Content: React.FC = () => {
     },
   );
 
+  const createInitialTopic = api.topic.createInitial.useMutation({
+    onSuccess: () => {
+      void refreshTopics();
+    },
+  });
+
   const createTopic = api.topic.create.useMutation({
     onSuccess: () => {
       void refreshTopics();
     },
   });
 
+  useEffect(() => {
+    if (topics?.length === 0 && !initialTopicCreated) {
+      void createInitialTopic.mutate({});
+      setInitialTopicCreated(true);
+    }
+  }, [topics, initialTopicCreated, createInitialTopic]);
+
   const { data: notes, refetch: refreshNotes } = api.note.getAll.useQuery(
     {
-      topicId: selectedTopic?.id ?? "",
+      topicId: selectedTopic?.id ?? topics?.[0]?.id ?? "",
     },
     {
       enabled: sessionData?.user !== undefined && selectedTopic !== null,
     },
   );
-
-  useEffect(() => {
-    setSelectedTopic(selectedTopic ?? topics?.[0] ?? null);
-  }, [selectedTopic, topics]);
 
   const createNote = api.note.create.useMutation({
     onSuccess: () => {
@@ -61,6 +71,10 @@ export const Content: React.FC = () => {
       void refreshNotes();
     },
   });
+
+  useEffect(() => {
+    setSelectedTopic(selectedTopic ?? topics?.[0] ?? null);
+  }, [selectedTopic, topics]);
 
   return (
     <div className="container mx-auto mt-5 grid grid-cols-4 gap-2">
