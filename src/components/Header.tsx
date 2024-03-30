@@ -1,8 +1,8 @@
+import { Github, Mail } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
-import { Github, Mail } from "lucide-react";
-import { ModeToggle } from "./ui/theme-toggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import Link from "next/link";
+import { ModeToggle } from "./ui/theme-toggle";
 
 function Header() {
   const { data: sessionData } = useSession();

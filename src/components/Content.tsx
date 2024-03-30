@@ -57,6 +57,9 @@ export const Content: React.FC = () => {
                   evt.preventDefault();
                   setSelectedTopic(topic);
                 }}
+                className={`text-sm font-medium transition-colors hover:text-primary ${
+                  selectedTopic?.id === topic.id ? "" : "text-muted-foreground"
+                }`}
               >
                 {topic.title}
               </a>
