@@ -1,4 +1,4 @@
-import { Folder, FolderClosed, FolderOpen, PlusCircle } from "lucide-react";
+import { FolderClosed, FolderOpen, FolderPlus } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { NoteCard } from "~/components/NoteCard";
@@ -108,12 +108,13 @@ export const Content: React.FC = () => {
         <Dialog open={addLabelDialog} onOpenChange={setAddLabelDialog}>
           <DialogTrigger asChild>
             <Button
+              className="mt-8"
               onSelect={() => {
                 setAddLabelDialog(true);
               }}
-              variant="secondary"
+              variant="outline"
             >
-              <PlusCircle className="mr-2 h-4 w-4" /> Add folder
+              <FolderPlus className="mr-2 h-5 w-5" /> Add folder
             </Button>
           </DialogTrigger>
           <DialogContent>
@@ -166,6 +167,7 @@ export const Content: React.FC = () => {
       </div>
       <div className="col-span-3">
         <NoteEditor
+          selectedFolder={selectedFolder}
           onSave={({ title, content }) => {
             void createNote.mutate({
               title,
@@ -174,9 +176,10 @@ export const Content: React.FC = () => {
             });
           }}
         />
+
         <div>
           {notes?.map((note) => (
-            <div key={note.id} className="mt-5">
+            <div key={note.id}>
               <NoteCard
                 note={note}
                 onDelete={() => void deleteNote.mutate({ id: note.id })}
