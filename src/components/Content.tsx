@@ -1,6 +1,6 @@
 import { PlusCircle } from "lucide-react";
 import { useSession } from "next-auth/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NoteCard } from "~/components/NoteCard";
 import { api, type RouterOutputs } from "~/utils/api";
 import { NoteEditor } from "./NoteEditor";
@@ -45,6 +45,10 @@ export const Content: React.FC = () => {
       enabled: sessionData?.user !== undefined && selectedTopic !== null,
     },
   );
+
+  useEffect(() => {
+    setSelectedTopic(selectedTopic ?? topics?.[0] ?? null);
+  }, [selectedTopic, topics]);
 
   const createNote = api.note.create.useMutation({
     onSuccess: () => {
@@ -145,7 +149,7 @@ export const Content: React.FC = () => {
             void createNote.mutate({
               title,
               content,
-              topicId: selectedTopic?.id ?? "Uncategorized",
+              topicId: selectedTopic?.id ?? topics?.[0]?.id ?? "",
             });
           }}
         />
