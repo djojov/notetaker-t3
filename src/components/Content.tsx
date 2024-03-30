@@ -1,4 +1,4 @@
-import { PlusCircle } from "lucide-react";
+import { Folder, FolderClosed, FolderOpen, PlusCircle } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { NoteCard } from "~/components/NoteCard";
@@ -78,28 +78,33 @@ export const Content: React.FC = () => {
 
   return (
     <div className="container mx-auto mt-5 grid grid-cols-4 gap-2">
-      <div className="px-2">
-        <ul className="menu rounded-box bg-base-100 w-56 p-2">
+      <div>
+        <ul className="menu rounded-box bg-base-100 w-56">
           {folders?.map((folder) => (
-            <li key={folder.id}>
+            <li key={folder.id} className="mb-2">
               <a
                 href="#"
                 onClick={(evt) => {
                   evt.preventDefault();
                   setSelectedFolder(folder);
                 }}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
+                className={`flex items-center text-sm font-medium transition-colors hover:text-primary ${
                   selectedFolder?.id === folder.id
                     ? ""
                     : "text-muted-foreground"
                 }`}
               >
+                {selectedFolder?.id === folder.id ? (
+                  <FolderOpen className="mr-2 h-5 w-5" />
+                ) : (
+                  <FolderClosed className="mr-2 h-5 w-5" />
+                )}
+
                 {folder.title}
               </a>
             </li>
           ))}
         </ul>
-        <div className="divider"></div>
         <Dialog open={addLabelDialog} onOpenChange={setAddLabelDialog}>
           <DialogTrigger asChild>
             <Button
@@ -108,21 +113,21 @@ export const Content: React.FC = () => {
               }}
               variant="secondary"
             >
-              <PlusCircle className="mr-2 h-4 w-4" /> Add label
+              <PlusCircle className="mr-2 h-4 w-4" /> Add folder
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Add new label</DialogTitle>
+              <DialogTitle>Create new folder</DialogTitle>
               <DialogDescription>
-                Add new label to categorize your notes.
+                Add folder to organize your notes
               </DialogDescription>
             </DialogHeader>
             <Input
               className="mb-8 mt-5"
-              id="newLabelInput"
+              id="newFolderInput"
               type="text"
-              placeholder="Create a new label..."
+              placeholder="Folder name..."
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   createFolder.mutate({
@@ -143,17 +148,17 @@ export const Content: React.FC = () => {
               <Button
                 type="submit"
                 onClick={() => {
-                  const newLabelInput = document.getElementById(
-                    "newLabelInput",
+                  const newFolderInput = document.getElementById(
+                    "newFolderInput",
                   ) as HTMLInputElement;
                   createFolder.mutate({
-                    title: newLabelInput.value,
+                    title: newFolderInput.value,
                   });
-                  newLabelInput.value = "";
+                  newFolderInput.value = "";
                   setAddLabelDialog(false);
                 }}
               >
-                Add label
+                Create
               </Button>
             </DialogFooter>
           </DialogContent>
