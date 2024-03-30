@@ -11,21 +11,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-
-import { Inter as FontSans } from "next/font/google";
-import { cn } from "~/lib/utils";
 import Link from "next/link";
-
-const fontSans = FontSans({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
 
 function Header() {
   const { data: sessionData } = useSession();
 
   return (
-    <div className="border-border/40 sticky top-0 border-b p-4 backdrop-blur">
+    <div className="sticky top-0 border-b border-border/40 p-4 backdrop-blur">
       <div className="container flex flex-row items-center justify-between">
         <a href="#" className="text-xl font-bold text-primary">
           Notetaker T3
@@ -42,17 +34,12 @@ function Header() {
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel
-                  className={cn(
-                    "font-sans font-normal antialiased",
-                    fontSans.variable,
-                  )}
-                >
+                <DropdownMenuLabel>
                   <div className="flex flex-col space-y-1">
                     <p className="text-sm font-medium leading-none">
                       {sessionData?.user?.name}
                     </p>
-                    <p className="text-muted-foreground text-xs leading-none">
+                    <p className="text-xs leading-none text-muted-foreground">
                       {sessionData?.user?.email}
                     </p>
                   </div>
@@ -60,10 +47,7 @@ function Header() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={() => void signOut()}
-                  className={cn(
-                    "cursor-pointer font-sans text-red-600 antialiased",
-                    fontSans.variable,
-                  )}
+                  className="cursor-pointer text-red-600"
                 >
                   Sign out
                 </DropdownMenuItem>

@@ -1,9 +1,8 @@
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import { NoteCard } from "~/components/NoteCard";
-import { NoteEditor } from "~/components/NoteEditor";
-
 import { api, type RouterOutputs } from "~/utils/api";
+import { NoteEditor } from "./NoteEditor";
 
 type Topic = RouterOutputs["topic"]["getAll"][0];
 
@@ -49,7 +48,7 @@ export const Content: React.FC = () => {
   return (
     <div className="container mx-auto mt-5 grid grid-cols-4 gap-2">
       <div className="px-2">
-        <ul className="menu w-56 rounded-box bg-base-100 p-2">
+        <ul className="menu rounded-box bg-base-100 w-56 p-2">
           {topics?.map((topic) => (
             <li key={topic.id}>
               <a

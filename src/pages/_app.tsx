@@ -19,20 +19,29 @@ const MyApp: AppType<{ session: Session | null }> = ({
   pageProps: { session, ...pageProps },
 }) => {
   return (
-    <SessionProvider session={session}>
-      <main
-        className={cn("bg-background font-sans antialiased", fontSans.variable)}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
+    <>
+      <style
+        jsx
+        global
+      >{`:root { --font-sans: ${fontSans.style.fontFamily};}}`}</style>
+      <SessionProvider session={session}>
+        <main
+          className={cn(
+            "bg-background font-sans antialiased",
+            fontSans.variable,
+          )}
         >
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </main>
-    </SessionProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </main>
+      </SessionProvider>
+    </>
   );
 };
 
