@@ -1,8 +1,20 @@
+import { PlusCircle } from "lucide-react";
 import { useSession } from "next-auth/react";
 import React, { useState } from "react";
 import { NoteCard } from "~/components/NoteCard";
 import { api, type RouterOutputs } from "~/utils/api";
 import { NoteEditor } from "./NoteEditor";
+import { Button } from "./ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { Input } from "./ui/input";
 
 type Topic = RouterOutputs["topic"]["getAll"][0];
 
@@ -10,6 +22,7 @@ export const Content: React.FC = () => {
   const { data: sessionData } = useSession();
 
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+  const [addLabelDialog, setAddLabelDialog] = useState(false);
 
   const { data: topics, refetch: refreshTopics } = api.topic.getAll.useQuery(
     undefined,
@@ -67,19 +80,64 @@ export const Content: React.FC = () => {
           ))}
         </ul>
         <div className="divider"></div>
-        <input
-          type="text"
-          placeholder="New Topic"
-          className="input input-sm input-bordered w-full"
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              createTopic.mutate({
-                title: e.currentTarget.value,
-              });
-              e.currentTarget.value = "";
-            }
-          }}
-        />
+        <Dialog open={addLabelDialog} onOpenChange={setAddLabelDialog}>
+          <DialogTrigger asChild>
+            <Button
+              onSelect={() => {
+                setAddLabelDialog(true);
+              }}
+              variant="secondary"
+            >
+              <PlusCircle className="mr-2 h-4 w-4" /> Add label
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add new label</DialogTitle>
+              <DialogDescription>
+                Add new label to categorize your notes.
+              </DialogDescription>
+            </DialogHeader>
+            <Input
+              className="mb-8 mt-5"
+              id="newLabelInput"
+              type="text"
+              placeholder="Create a new label..."
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  createTopic.mutate({
+                    title: e.currentTarget.value,
+                  });
+                  e.currentTarget.value = "";
+                  setAddLabelDialog(false);
+                }
+              }}
+            />
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setAddLabelDialog(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                onClick={() => {
+                  const newLabelInput = document.getElementById(
+                    "newLabelInput",
+                  ) as HTMLInputElement;
+                  createTopic.mutate({
+                    title: newLabelInput.value,
+                  });
+                  newLabelInput.value = "";
+                  setAddLabelDialog(false);
+                }}
+              >
+                Add label
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
       <div className="col-span-3">
         <NoteEditor
@@ -87,7 +145,7 @@ export const Content: React.FC = () => {
             void createNote.mutate({
               title,
               content,
-              topicId: selectedTopic?.id ?? "",
+              topicId: selectedTopic?.id ?? "Uncategorized",
             });
           }}
         />
