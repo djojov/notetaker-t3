@@ -77,7 +77,7 @@ export const Content: React.FC = () => {
   }, [selectedFolder, folders]);
 
   return (
-    <div className="container mx-auto mt-5 grid grid-cols-4 gap-2">
+    <div className="container mx-auto my-12 grid grid-cols-1 gap-2 md:grid-cols-4">
       <div>
         <ul className="menu rounded-box bg-base-100 w-56">
           {folders?.map((folder) => (
@@ -166,18 +166,20 @@ export const Content: React.FC = () => {
         </Dialog>
       </div>
       <div className="col-span-3">
-        <NoteEditor
-          selectedFolder={selectedFolder}
-          onSave={({ title, content }) => {
-            void createNote.mutate({
-              title,
-              content,
-              folderId: selectedFolder?.id ?? folders?.[0]?.id ?? "",
-            });
-          }}
-        />
+        <div className="flex justify-end">
+          <NoteEditor
+            selectedFolder={selectedFolder}
+            onSave={({ title, content }) => {
+              void createNote.mutate({
+                title,
+                content,
+                folderId: selectedFolder?.id ?? folders?.[0]?.id ?? "",
+              });
+            }}
+          />
+        </div>
 
-        <div>
+        <div className="mt-16 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 lg:gap-4">
           {notes?.map((note) => (
             <div key={note.id}>
               <NoteCard
