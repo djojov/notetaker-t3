@@ -5,9 +5,10 @@ import { Inter as FontSans } from "next/font/google";
 
 import { api } from "~/utils/api";
 
-import "~/styles/globals.css";
 import { ThemeProvider } from "~/components/theme-provider";
+import { Toaster } from "~/components/ui/toaster";
 import { cn } from "~/lib/utils";
+import "~/styles/globals.css";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -38,6 +39,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
             disableTransitionOnChange
           >
             <Component {...pageProps} />
+            <Toaster />
           </ThemeProvider>
         </main>
       </SessionProvider>

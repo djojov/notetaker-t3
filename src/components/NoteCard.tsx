@@ -20,6 +20,7 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
+import { useToast } from "./ui/use-toast";
 
 type Note = RouterOutputs["note"]["getAll"][0];
 
@@ -29,6 +30,7 @@ export const NoteCard = ({ note }: { note: Note }) => {
   const [updateNoteDialog, setUpdateNoteDialog] = useState(false);
 
   const trpc = api.useUtils();
+  const { toast } = useToast();
 
   const { mutate: updateNote } = api.note.update.useMutation({
     onSettled: async () => {
@@ -103,6 +105,10 @@ export const NoteCard = ({ note }: { note: Note }) => {
                       title: noteTitle,
                       content: noteContent,
                     });
+                    toast({
+                      title: "ℹ️ Note updated",
+                      description: "Your note has been updated successfully.",
+                    });
                   }}
                 >
                   Update
@@ -111,7 +117,13 @@ export const NoteCard = ({ note }: { note: Note }) => {
             </DialogContent>
           </Dialog>
           <Button
-            onClick={() => deleteNote({ id: note.id })}
+            onClick={() => {
+              deleteNote({ id: note.id });
+              toast({
+                title: "❌ Note deleted",
+                description: "Your note has been deleted successfully.",
+              });
+            }}
             variant="secondary"
             size="icon"
           >

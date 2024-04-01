@@ -14,6 +14,7 @@ import {
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Textarea } from "./ui/textarea";
+import { useToast } from "./ui/use-toast";
 
 type Folder = RouterOutputs["folder"]["getAll"][0];
 
@@ -27,6 +28,8 @@ export const CreateNote = ({
   const [noteContent, setNoteContent] = useState<string>("");
   const [noteTitle, setNoteTitle] = useState<string>("");
   const [addNoteDialog, setAddNoteDialog] = useState(false);
+
+  const { toast } = useToast();
 
   return (
     <>
@@ -88,6 +91,10 @@ export const CreateNote = ({
                 });
                 setNoteTitle("");
                 setNoteContent("");
+                toast({
+                  title: "✅ Note created",
+                  description: "Your note has been created successfully.",
+                });
               }}
             >
               Create

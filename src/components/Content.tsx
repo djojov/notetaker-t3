@@ -15,6 +15,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Input } from "./ui/input";
+import { useToast } from "./ui/use-toast";
 
 type Folder = RouterOutputs["folder"]["getAll"][0];
 
@@ -24,6 +25,7 @@ export const Content: React.FC = () => {
   const [initialFolderCreated, setInitialFolderCreated] = useState(false);
 
   const trpc = api.useUtils();
+  const { toast } = useToast();
 
   const { data: sessionData } = useSession();
 
@@ -150,6 +152,10 @@ export const Content: React.FC = () => {
                   });
                   newFolderInput.value = "";
                   setAddLabelDialog(false);
+                  toast({
+                    title: "📁 Folder created",
+                    description: "Your folder has been created successfully.",
+                  });
                 }}
               >
                 Create
