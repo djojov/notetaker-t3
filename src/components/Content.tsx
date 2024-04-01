@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { NoteCard } from "~/components/NoteCard";
 import { api, type RouterOutputs } from "~/utils/api";
-import { CreateNote } from "./CreateNote";
+import { NoteCreator } from "./NoteCreator";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -166,7 +166,7 @@ export const Content: React.FC = () => {
       </div>
       <div className="col-span-3">
         <div className="flex justify-end">
-          <CreateNote
+          <NoteCreator
             selectedFolder={selectedFolder}
             onSave={({ title, content }) => {
               void createNote.mutate({

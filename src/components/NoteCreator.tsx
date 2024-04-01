@@ -18,7 +18,7 @@ import { useToast } from "./ui/use-toast";
 
 type Folder = RouterOutputs["folder"]["getAll"][0];
 
-export const CreateNote = ({
+export const NoteCreator = ({
   onSave,
   selectedFolder,
 }: {
@@ -54,7 +54,6 @@ export const CreateNote = ({
               </span>
             </DialogDescription>
           </DialogHeader>
-          {/* <div className=""> */}
           <div className="w-full">
             <Label htmlFor="noteTitle">Title</Label>
             <Input
@@ -76,7 +75,6 @@ export const CreateNote = ({
               id="noteContent"
             />
           </div>
-          {/* </div> */}
           <DialogFooter className="mt-6">
             <Button variant="outline" onClick={() => setAddNoteDialog(false)}>
               Cancel

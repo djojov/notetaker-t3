@@ -1,6 +1,16 @@
 import { Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { api, type RouterOutputs } from "../utils/api";
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog";
 import { Button } from "./ui/button";
 import {
   Card,
@@ -116,19 +126,37 @@ export const NoteCard = ({ note }: { note: Note }) => {
               </DialogFooter>
             </DialogContent>
           </Dialog>
-          <Button
-            onClick={() => {
-              deleteNote({ id: note.id });
-              toast({
-                title: "❌ Note deleted",
-                description: "Your note has been deleted successfully.",
-              });
-            }}
-            variant="secondary"
-            size="icon"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="secondary" size="icon">
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  your note from your account.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <Button
+                  variant="destructive"
+                  onClick={() => {
+                    deleteNote({ id: note.id });
+                    toast({
+                      title: "🗑️ Note deleted",
+                      description: "Your note has been deleted successfully.",
+                    });
+                  }}
+                >
+                  Continue
+                </Button>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </CardFooter>
       </Card>
     </>
