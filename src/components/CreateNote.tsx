@@ -17,7 +17,7 @@ import { Textarea } from "./ui/textarea";
 
 type Folder = RouterOutputs["folder"]["getAll"][0];
 
-export const NoteEditor = ({
+export const CreateNote = ({
   onSave,
   selectedFolder,
 }: {

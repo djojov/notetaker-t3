@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { NoteCard } from "~/components/NoteCard";
 import { api, type RouterOutputs } from "~/utils/api";
-import { NoteEditor } from "./NoteEditor";
+import { CreateNote } from "./CreateNote";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -23,24 +23,23 @@ export const Content: React.FC = () => {
   const [addLabelDialog, setAddLabelDialog] = useState(false);
   const [initialFolderCreated, setInitialFolderCreated] = useState(false);
 
+  const trpc = api.useUtils();
+
   const { data: sessionData } = useSession();
 
-  const { data: folders, refetch: refreshFolders } = api.folder.getAll.useQuery(
-    undefined,
-    {
-      enabled: sessionData?.user !== undefined,
-    },
-  );
+  const { data: folders } = api.folder.getAll.useQuery(undefined, {
+    enabled: sessionData?.user !== undefined,
+  });
 
   const createInitialFolder = api.folder.createInitial.useMutation({
-    onSuccess: () => {
-      void refreshFolders();
+    onSettled: async () => {
+      await trpc.folder.getAll.invalidate();
     },
   });
 
   const createFolder = api.folder.create.useMutation({
-    onSuccess: () => {
-      void refreshFolders();
+    onSettled: async () => {
+      await trpc.folder.getAll.invalidate();
     },
   });
 
@@ -51,7 +50,7 @@ export const Content: React.FC = () => {
     }
   }, [folders, initialFolderCreated, createInitialFolder]);
 
-  const { data: notes, refetch: refreshNotes } = api.note.getAll.useQuery(
+  const { data: notes } = api.note.getAll.useQuery(
     {
       folderId: selectedFolder?.id ?? folders?.[0]?.id ?? "",
     },
@@ -61,14 +60,8 @@ export const Content: React.FC = () => {
   );
 
   const createNote = api.note.create.useMutation({
-    onSuccess: () => {
-      void refreshNotes();
-    },
-  });
-
-  const deleteNote = api.note.delete.useMutation({
-    onSuccess: () => {
-      void refreshNotes();
+    onSettled: async () => {
+      await trpc.note.getAll.invalidate();
     },
   });
 
@@ -167,7 +160,7 @@ export const Content: React.FC = () => {
       </div>
       <div className="col-span-3">
         <div className="flex justify-end">
-          <NoteEditor
+          <CreateNote
             selectedFolder={selectedFolder}
             onSave={({ title, content }) => {
               void createNote.mutate({
@@ -180,14 +173,7 @@ export const Content: React.FC = () => {
         </div>
 
         <div className="mt-16 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 lg:gap-4">
-          {notes?.map((note) => (
-            <div key={note.id}>
-              <NoteCard
-                note={note}
-                onDelete={() => void deleteNote.mutate({ id: note.id })}
-              />
-            </div>
-          ))}
+          {notes?.map((note) => <NoteCard key={note.id} note={note} />)}
         </div>
       </div>
     </div>
